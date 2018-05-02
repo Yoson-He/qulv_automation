@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block mainbody %}
+
+<div>
+    <blockquote class="func-bar">
+        <form class="layui-form" style="float:left;">
+            <div class="layui-form-item" style="margin:0;">
+                <label class="func-form-label" style=" width: 55px;">名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="user_name" placeholder="" autocomplete="off" class="func-input">
+                </div>
+                <label class="func-form-label">用户ID</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="user_id" placeholder="" autocomplete="off" class="func-input">
+                </div>
+
+            </div>
+        </form>
+        <button lay-filter="search" class="query-btn" lay-submit><i class="fa fa-search"
+                                                                    aria-hidden="true"></i> 查询
+        </button>
+
+    </blockquote>
+    <hr class="layui-bg-gray">
+    <div id="func_sub_bar" class="func-bar-sub">
+        <button class="add-btn" onclick="add_btn('添加用户','/user_from/','50%','90%')"><i class="fa fa-plus"></i>添加</button>
+    </div>
+
+
+    <hr class="layui-bg-green">
+    <div id="" style="width: 100%;height: 100%;">
+        <div class="data-field-box layui-form">
+            <table class="layui-table admin-table">
+                <thead>
+                <tr>
+                    <th style="width: 30px;"><input type="checkbox" lay-filter="allselector" lay-skin="primary">
+                    </th>
+                    <th>用户ID</th>
+                    <th>姓名</th>
+                    <th>手机</th>
+                    <th>角色权限</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="content">
+                {% for value in List %}
+                <tr>
+                    <td><input type="checkbox" lay-skin="primary" id="user_list"></td>
+                    <td>{{ value.id }}</td>
+                    <td>{{ value.user_name }}</td>
+                    <td>{{ value.phone }}</td>
+                    <td>{{ value.user_role }}</td>
+                    <td>{{ value.create_time }}</td>
+                    <td>
+                        <a href="javascript:;" data-name="{{ item.name }}" data-opt="edit"
+                           class="layui-btn layui-btn-mini">编辑</a>
+                        <a href="javascript:;" data-id="1" data-opt="del"
+                           class="layui-btn layui-btn-danger layui-btn-mini" onclick="delete_btn(del_id={{ value.id }})">删除</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="data-pages-div">
+            <div id="paged" class="data-pages">
+                <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-0"><span
+                        class="layui-laypage-curr"><em class="layui-laypage-em"></em><em>1</em></span><a
+                        href="javascript:;" data-page="2">2</a><a href="javascript:;" data-page="3">3</a><a
+                        href="javascript:;" data-page="4">4</a><a href="javascript:;"
+                                                                  data-page="5">5</a><span>…</span><a
+                        href="javascript:;" class="layui-laypage-last" title="尾页" data-page="19">末页</a><a
+                        href="javascript:;" class="layui-laypage-next" data-page="2">下一页</a></div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+
+
+{% endblock %}

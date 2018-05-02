@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+{% block mainbody %}
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">QuLv-测试管理系统</div>
+        <ul class="layui-nav layui-layout-right kit-nav">
+            <li class="layui-nav-item"><a href="javascript:;"><img src="http://m.zhengjinfan.cn/images/0.jpg"
+                                                                   class="layui-nav-img">当前登录用户：{{user_name}}</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="javascript:;">基本资料</a></dd>
+                    <dd><a href="javascript:;">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="logout-button" onclick="logout()">&nbsp;退出</li>
+        </ul>
+
+    </div>
+
+    <div class="layui-side layui-bg-black kit-side">
+        <div class="layui-side-scroll">
+            <div class="kit-side-fold"><i class="fa fa-navicon" aria-hidden="true"></i></div>
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree layui-bg-molv" lay-filter="kitNavbar" kit-navbar>
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;"><i class="fa fa-desktop icon">&nbsp;&nbsp;</i><span>系统管理</span></a>
+                    <dl class="layui-nav-child" style="margin-left: -9px;">
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'sys_user/',icon:'fa-user',title:'账号管理',id:'sys_user_account'}"><i
+                                class="fa fa-user">&nbsp;&nbsp;</i><span>账号管理</span></a></dd>
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'sys_menu/',icon:'fa-gears',title:'菜单管理',id:'sys_menu'}"><i
+                                class="fa fa-gears">&nbsp;&nbsp;</i><span>菜单管理</span></a></dd>
+                        <dd>
+                            <a href="javascript:;" kit-target
+                               data-options="{url:'https://www.baidu.com',icon:'fa-paw',title:'百度一下',id:'baidu'}"><i
+                                    class="fa fa-paw">&nbsp;&nbsp;</i><span> 百度一下</span></a>
+                        </dd>
+                    </dl>
+                </li>
+                <!-- End -->
+
+                <!-- 官网系统 -->
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><i class="fa fa-diamond"
+                                              aria-hidden="true">&nbsp;&nbsp;</i><span>官网系统</span></a>
+                    <dl class="layui-nav-child" style="margin-left: -9px;">
+                        <li class="layui-nav-item layui-nav-item-sub" style="margin-left: -9px;"><a href="javascript:;"><i
+                                class="fa fa-star-o">&nbsp;&nbsp;</i><span>Qulv_接口</span></a>
+                            <dl class="layui-nav-child layui-nav-child-sub" style="margin-left: -9px;">
+                                <dd class="layui-nav-item layui-nav-item-sub">
+                                    <a href="javascript:;" kit-target
+                                       data-options="{url:'',icon:'fa-check-square',title:'M站API',id:'m_station_api'}"><i
+                                            class="fa  fa-check-square">&nbsp;&nbsp;</i><span>M站</span></a></dd>
+                                <dd class="layui-nav-item layui-nav-item-sub">
+                                    <a href="javascript:;" kit-target
+                                       data-options="{url:'',icon:'fa-check-square',title:'PC端API',id:'pc_api'}"><i
+                                            class="fa fa-check-square">&nbsp;&nbsp;</i><span>PC端</span></a></dd>
+                                <dd class="layui-nav-item layui-nav-item-sub">
+                                    <a href="javascript:;" kit-target
+                                       data-options="{url:'',icon:'fa-check-square',title:'苹果端API',id:'ios_api'}"><i
+                                            class="fa fa-check-square">&nbsp;&nbsp;</i><span>苹果端</span></a></dd>
+                                <dd class="layui-nav-item layui-nav-item-sub">
+                                    <a href="javascript:;" kit-target
+                                       data-options="{url:'',icon:'fa-check-square',title:'安卓端API',id:'android_api'}"><i
+                                            class="fa fa-check-square">&nbsp;&nbsp;</i><span>安卓端</span></a></dd>
+                            </dl>
+                        </li>
+                        <li class="layui-nav-item layui-nav-item-sub" style="margin-left: -9px;">
+                            <a href="javascript:;">
+                                <i class="fa fa-star-o">&nbsp;&nbsp;</i><span>Qulv_测试用例</span></a>
+                            <dl class="layui-nav-child layui-nav-child-sub" style="margin-left: -9px;">
+                                <dd class="layui-nav-item layui-nav-item-sub">
+                                    <a href="javascript:;" kit-target
+                                       data-options="{url:'',icon:'fa-check-square',title:'M站测试用例',id:'m_station_tc'}"><i
+                                            class="fa  fa-check-square">&nbsp;&nbsp;</i><span>M站</span></a></dd>
+                                <dd class="layui-nav-item layui-nav-item-sub">
+                                    <a href="javascript:;" kit-target
+                                       data-options="{url:'',icon:'fa-check-square',title:'PC端测试用例',id:'pc_tc'}"><i
+                                            class="fa fa-check-square">&nbsp;&nbsp;</i><span>PC端</span></a></dd>
+                                <dd class="layui-nav-item layui-nav-item-sub">
+                                    <a href="javascript:;" kit-target
+                                       data-options="{url:'',icon:'fa-check-square',title:'苹果端测试用例',id:'ios_tc'}"><i
+                                            class="fa fa-check-square">&nbsp;&nbsp;</i><span>苹果端</span></a></dd>
+                                <dd class="layui-nav-item layui-nav-item-sub">
+                                    <a href="javascript:;" kit-target
+                                       data-options="{url:'',icon:'fa-check-square',title:'安卓端测试用例',id:'android_tc'}"><i
+                                            class="fa fa-check-square">&nbsp;&nbsp;</i><span>安卓端</span></a></dd>
+                            </dl>
+                        </li>
+                        <li class="layui-nav-item layui-nav-item-sub" style="margin-left: -9px;">
+                            <a href="javascript:;">
+                                <i class="fa fa-star-o">&nbsp;&nbsp;</i><span>Qulv_测试任务</span></a>
+                            <dl class="layui-nav-child layui-nav-child-sub" style="margin-left: -9px;">
+                                <dd class="layui-nav-item layui-nav-item-sub">
+                                    <a href="javascript:;" kit-target
+                                       data-options="{url:'',icon:'fa-check-square',title:'M站测试任务',id:'m_station_task'}"><i
+                                            class="fa  fa-check-square">&nbsp;&nbsp;</i><span>M站</span></a></dd>
+                                <dd class="layui-nav-item layui-nav-item-sub">
+                                    <a href="javascript:;" kit-target
+                                       data-options="{url:'',icon:'fa-check-square',title:'PC端测试任务',id:'pc_task'}"><i
+                                            class="fa fa-check-square">&nbsp;&nbsp;</i><span>PC端</span></a></dd>
+                                <dd class="layui-nav-item layui-nav-item-sub">
+                                    <a href="javascript:;" kit-target
+                                       data-options="{url:'',icon:'fa-check-square',title:'苹果端测试任务',id:'ios_task'}"><i
+                                            class="fa fa-check-square">&nbsp;&nbsp;</i><span>苹果端</span></a></dd>
+                                <dd class="layui-nav-item layui-nav-item-sub">
+                                    <a href="javascript:;" kit-target
+                                       data-options="{url:'',icon:'fa-check-square',title:'安卓端测试任务',id:'android_task'}"><i
+                                            class="fa fa-check-square">&nbsp;&nbsp;</i><span>安卓端</span></a></dd>
+                            </dl>
+                        </li>
+                        <li class="layui-nav-item layui-nav-item-sub" style="margin-left: -9px;">
+                            <a href="javascript:;">
+                                <i class="fa fa-star-o">&nbsp;&nbsp;</i><span>Qulv_测试报告</span></a>
+                            <dl class="layui-nav-child layui-nav-child-sub" style="margin-left: -9px;">
+                                <dd class="layui-nav-item layui-nav-item-sub">
+                                    <a href="javascript:;" kit-target
+                                       data-options="{url:'',icon:'fa-check-square',title:'M站测试报告',id:'m_station_report'}"><i
+                                            class="fa  fa-check-square">&nbsp;&nbsp;</i><span>M站</span></a></dd>
+                                <dd class="layui-nav-item layui-nav-item-sub">
+                                    <a href="javascript:;" kit-target
+                                       data-options="{url:'',icon:'fa-check-square',title:'PC端测试报告',id:'pc_report'}"><i
+                                            class="fa fa-check-square">&nbsp;&nbsp;</i><span>PC端</span></a></dd>
+                                <dd class="layui-nav-item layui-nav-item-sub">
+                                    <a href="javascript:;" kit-target
+                                       data-options="{url:'',icon:'fa-check-square',title:'苹果端测试报告',id:'ios_report'}"><i
+                                            class="fa fa-check-square">&nbsp;&nbsp;</i><span>苹果端</span></a></dd>
+                                <dd class="layui-nav-item layui-nav-item-sub">
+                                    <a href="javascript:;" kit-target
+                                       data-options="{url:'',icon:'fa-check-square',title:'安卓端测试报告',id:'android_report'}"><i
+                                            class="fa fa-check-square">&nbsp;&nbsp;</i><span>安卓端</span></a></dd>
+                            </dl>
+                        </li>
+                    </dl>
+                </li>
+                <!-- end -->
+
+                <!---订单系统 ---->
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><i class="fa fa-money"
+                                              aria-hidden="true">&nbsp;&nbsp;</i><span>订单系统</span></a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-star-o',title:'订单接口',id:'oc_api'}"><i
+                                class="fa fa-star">&nbsp;&nbsp;</i><span>Oc_接口</span></a></dd>
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-bookmark-o',title:'订单测试用例',id:'oc_tc'}"><i
+                                class="fa fa-bookmark">&nbsp;&nbsp;</i><span>Oc_测试用例</span></a>
+                        </dd>
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-files-o',title:'订单测试任务',id:'oc_task'}"><i
+                                class="fa fa-files-o">&nbsp;&nbsp;</i><span>Oc_测试任务</span></a>
+                        </dd>
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-bar-chart-o',title:'订单测试报告',id:'oc_report'}"><i
+                                class="fa fa-bar-chart">&nbsp;&nbsp;</i><span>Oc_测试报告</span></a>
+                        </dd>
+                    </dl>
+                </li>
+                <!-- End -->
+
+                <!---产品系统 ---->
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><i class="fa fa-coffee"
+                                              aria-hidden="true">&nbsp;&nbsp;</i><span>产品系统</span></a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'{% url 'pro_api_page' %}',icon:'fa-star-o',title:'产品接口',id:'pro_api'}"><i
+                                class="fa fa-star">&nbsp;&nbsp;</i><span>Pro_接口</span></a></dd>
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'{% url 'case_manage' %}',icon:'fa-bookmark-o',title:'产品测试用例',id:'pro_tc'}"><i
+                                class="fa fa-bookmark">&nbsp;&nbsp;</i><span>Pro_测试用例</span></a>
+                        </dd>
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'{% url 'task_page'%}',icon:'fa-files-o',title:'产品测试任务',id:'pro_task'}"><i
+                                class="fa fa-files-o">&nbsp;&nbsp;</i><span>Pro_测试任务</span></a>
+                        </dd>
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-bar-chart-o',title:'订单测试报告',id:'pro_report'}"><i
+                                class="fa fa-bar-chart">&nbsp;&nbsp;</i><span>Pro_测试报告</span></a>
+                        </dd>
+                    </dl>
+                </li>
+                <!-- End -->
+                <!---营销系统 ---->
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><i class="fa fa-bar-chart-o"
+                                              aria-hidden="true">&nbsp;&nbsp;</i><span>营销系统</span></a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-star-o',title:'营销接口',id:'crm_api'}"><i
+                                class="fa fa-star">&nbsp;&nbsp;</i><span>Crm_接口</span></a></dd>
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-bookmark-o',title:'营销测试用例',id:'crm_tc'}"><i
+                                class="fa fa-bookmark">&nbsp;&nbsp;</i><span>Crm_测试用例</span></a>
+                        </dd>
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-files-o',title:'营销测试任务',id:'crm_task'}"><i
+                                class="fa fa-files-o">&nbsp;&nbsp;</i><span>Crm_测试任务</span></a>
+                        </dd>
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-bar-chart-o',title:'营销测试报告',id:'crm_report'}"><i
+                                class="fa fa-bar-chart">&nbsp;&nbsp;</i><span>Crm_测试报告</span></a>
+                        </dd>
+                    </dl>
+                </li>
+                <!-- End -->
+                <!---公共系统 ---->
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><i class="fa fa-briefcase"
+                                              aria-hidden="true">&nbsp;&nbsp;</i><span>公共系统</span></a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-star-o',title:'公共系统接口',id:'pub_api'}"><i
+                                class="fa fa-star">&nbsp;&nbsp;</i><span>Pub_接口</span></a></dd>
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'{% url 'pub_case_manage' %}',icon:'fa-bookmark-o',title:'公共系统测试用例',id:'pub_tc'}"><i
+                                class="fa fa-bookmark">&nbsp;&nbsp;</i><span>Pub_测试用例</span></a>
+                        </dd>
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-files-o',title:'公共系统测试任务',id:'pub_task'}"><i
+                                class="fa fa-files-o">&nbsp;&nbsp;</i><span>Pub_测试任务</span></a>
+                        </dd>
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-bar-chart-o',title:'公共系统测试报告',id:'pub_report'}"><i
+                                class="fa fa-bar-chart">&nbsp;&nbsp;</i><span>Pub_测试报告</span></a>
+                        </dd>
+                    </dl>
+                </li>
+                <!-- End -->
+
+                <!---  服务管理  --->
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><i class="fa fa-server" aria-hidden="true">&nbsp;&nbsp;</i><span>服务管理</span></a>
+                    <dl class="layui-nav-child" style="margin-left: -9px;">
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-clock-o',title:'定时任务',id:'timed_task'}"><i
+                                class="fa fa-clock-o">&nbsp;&nbsp;</i><span>定时任务</span></a></dd>
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-leaf',title:'服务监控',id:'service_monitoring'}"><i
+                                class="fa fa-leaf">&nbsp;&nbsp;</i><span>服务监控</span></a>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><i class="fa fa-wrench"
+                                              aria-hidden="true">&nbsp;&nbsp;</i><span>DevOps</span></a>
+                    <dl class="layui-nav-child" style="margin-left: -9px;">
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-list-ol',title:'版本管理',id:'version_management'}"><i
+                                class="fa fa-list-ol">&nbsp;&nbsp;</i><span>版本管理</span></a></dd>
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-database',title:'数据库操作',id:'db_handler'}"><i
+                                class="fa fa-database">&nbsp;&nbsp;</i><span>数据库操作</span></a>
+                        </dd>
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-support',title:'辅助功能',id:'suport'}"><i
+                                class="fa fa-support">&nbsp;&nbsp;</i><span>辅助功能</span></a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><i class="fa fa-cloud"
+                                              aria-hidden="true">&nbsp;&nbsp;</i><span>数据分析</span></a>
+                    <dl class="layui-nav-child" style="margin-left: -9px;">
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-pie-chart',title:'图形报表',id:'data_chart'}"><i
+                                class="fa fa-pie-chart">&nbsp;&nbsp;</i><span>图形报表</span></a></dd>
+
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="layui-body" id="container">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">主体内容加载中,请稍等...</div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+
+        <a href="http://www.qulv.com/" style="margin-left: 560px;"> 2017 - qulv 测试系统 </a>
+
+    </div>
+</div>
+
+{% endblock %}

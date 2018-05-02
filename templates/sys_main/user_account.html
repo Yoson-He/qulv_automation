@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block mainbody %}
+<div>
+    <blockquote class="func-bar">
+        <form class="layui-form" style="float:left;">
+            <div class="layui-form-item" style="margin:0;">
+
+                <label class="func-form-label" style=" width: 55px;">名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="user_name" placeholder="" autocomplete="off" class="func-input">
+                </div>
+                <label class="func-form-label">用户ID</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="user_id" placeholder="" autocomplete="off" class="func-input">
+                </div>
+
+            </div>
+        </form>
+        <button lay-filter="search" class="query-btn" lay-submit><i class="fa fa-search"
+                                                                    aria-hidden="true"></i> 查询
+        </button>
+    </blockquote>
+    <hr class="layui-bg-gray">
+    <div id="func_sub_bar" class="func-bar-sub">
+        <button class="add-btn" onclick="show('添加用户','/user_from/','50%','90%')"><i class="fa fa-plus"></i>添加
+        </button>
+    </div>
+
+
+    <hr class="layui-bg-green">
+
+</div>
+
+<table class="layui-hide" id="sys_user" lay-filter="sys_user"></table>
+
+<script type="text/html" id="operation_bar">
+    <a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="delete">删除</a>
+</script>
+<script>
+layui.use(['table','form','layer'], function(){
+        var table = layui.table, form = layui.form, $ = layui.jquery, layer = layui.layer;
+        table.render({
+            id: 'sys_user'
+            ,elem: '#sys_user'
+            ,height:'full-140'
+            ,size: 'sm'
+            ,url: '/user_list/' //数据接口
+            ,page: true //开启分页
+            ,limit: 10
+            ,limits:[10,30,50,100]
+            ,cols: [[ //表头
+                {field:'id',title: '用户ID', width:80, sort: true, fixed: true},
+                {field:'user_name',title:'用户名' , width:100},
+                {field:'realName', title:'姓名' ,width:100},
+                {field:'phone', title:'手机' ,width:150},
+                {field:'user_role',title:'角色权限' , width:90},
+                {field:'create_by', title:'创建人' ,width:75},
+                {field:'create_time', title:'创建时间' ,width:200},
+                {field:'update_by', title:'更新人' ,width:75},
+                {field:'update_time', title:'更新时间' ,width:200},
+                {fixed: 'right',width:150, align:'center', toolbar: '#operation_bar'}
+            ]]
+            ,done: function(res, page, count){
+			//如果是异步请求数据方式，res即为你接口返回的信息。
+			//如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+			//分类显示中文名称
+			$("[data-field='user_role']").children().each(function(){
+					if($(this).text()=='0'){
+					   $(this).text("游客")
+					}else if($(this).text()=='8'){
+					   $(this).text("测试")
+					}else if($(this).text()=='9'){
+					   $(this).text("管理员")
+					}
+			        })
+            }
+
+        });
+
+        //监听工具条
+        table.on('tool(sys_user)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var layEvent = obj.event; //获得 lay-event 对应的值
+            var data = obj.data;
+            if (layEvent === 'delete'){
+                layer.confirm('确认删除？', function(index){
+                       $.ajax({
+                        type:"post",
+                        url:"/user_from/delete/",
+                        data: {id:data.id},
+                        success: function (res){
+                          if( res==1){
+                            layer.msg("删除成功!!!");
+                            table.reload('sys_user');
+                          }else if(res==0){
+                            layer.msg("删除失败!!!");
+                          }else if(res==2){
+                            layer.msg("该用户已存在！！！");
+                          }
+                        },
+                        error: function (jqXHR){
+                            parent.layer.alert(jqXHR.responseText);
+                        }
+                        });
+                });
+            } else if(layEvent === 'edit'){
+                layer.msg('编辑操作');
+            }
+        });
+    });
+
+</script>
+{% endblock %}

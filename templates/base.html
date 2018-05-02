@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <META HTTP-EQUIV="pragma" CONTENT="no-cache">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>QuLv-测试管理系统</title>
+    <link rel="stylesheet" href="/static/libs/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/static/libs/build/css/app.css" media="all">
+    <link rel="stylesheet" href="/static/libs/build/css/themes/light.css" media="all">
+    <link rel="stylesheet" type="text/css" href="/static/libs/public/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/qulv_test/css/qulv_test.css" media="all">
+    <script src="/static/libs/layui/layui.js"></script>
+    <script type="text/javascript" src="/static/qulv_test/js/sys_admin.js"></script>
+    <script type="text/javascript" src="/static/libs/public/js/jquery.min.js"></script>
+</head>
+<body>
+{% block mainbody %}
+
+<!--     页面内容填写       -->
+
+<!--     页面内容填写       -->
+
+{% endblock %}
+<script>
+        var message;
+        layui.config({
+            base: '/static/libs/build/js/'
+        }).use(['app', 'message'], function() {
+            var app = layui.app,
+                $ = layui.jquery,
+                layer = layui.layer;
+            //将message设置为全局以便子页面调用
+            message = layui.message;
+            //主入口
+            app.set({
+                type: 'iframe'
+            }).init();
+        });
+
+
+</script>
+<script>
+    <!--三级导航菜单-->
+    $('li.layui-nav-item.layui-nav-item-sub').on('click', function() {
+        $(this).toggleClass('layui-nav-itemed-sub');
+        $('dd.layui-this').removeClass('layui-this');
+         if ($(this).siblings('li.layui-nav-item.layui-nav-item-sub').hasClass('layui-nav-item-sub')) {
+            $(this).siblings('li.layui-nav-item.layui-nav-item-sub').removeClass('layui-nav-itemed');
+            $(this).siblings('li.layui-nav-item.layui-nav-item-sub').removeClass('layui-nav-itemed-sub');
+        }
+    });
+
+    $('dl.layui-nav-child > dd').on('click', function(e) {
+        e.stopPropagation();
+        if (!$(this).hasClass('layui-nav-item-sub')) {
+             $('li.layui-nav-item.layui-nav-item-sub').removeClass('layui-nav-itemed');
+            $('li.layui-nav-item.layui-nav-item-sub').removeClass('layui-nav-itemed-sub');
+        }
+    });
+
+
+</script>
+
+
+</body>
+</html>

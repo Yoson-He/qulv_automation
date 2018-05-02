@@ -1,0 +1,346 @@
+{% extends "base.html" %}
+{% block mainbody %}
+<div style="margin: 15px;">
+    <form class="layui-form">
+        {% csrf_token %}
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="x-red"></span>接口ID</label>
+            <div class="layui-input-block">
+                <label class="layui-form-label" id="api_id"></label>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="x-red">*</span>接口名</label>
+            <div class="layui-input-block">
+                <input lay-verify="api_name" type="text" name="api_name" placeholder="接口名" id="api_name"
+                       autocomplete="off" class="layui-input" style="width: 200px;">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="x-red">*</span>测试模块</label>
+            <div class="layui-input-inline">
+                <select name="main_module" id="main_module" lay-filter="main_module" lay-verify="main_module">
+                    <option value="">主模块</option>
+                    <option value="资源中心">资源中心</option>
+                    <option value="产品中心">产品中心</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="module " id="module" lay-filter="module" lay-verify="module">
+                    <option value="">模块</option>
+                </select>
+            </div>
+            <div class="layui-input-inline" style="width: 235px;">
+                <select name="sub_module" id="sub_module" lay-filter="sub_module" lay-verify="sub_module">
+                    <option value="">子模块</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="x-red">*</span>API类型</label>
+            <div class="layui-input-block" style="width: 100px;">
+                <select name="api_type" lay-verify="api_type" id="api_type">
+                    <option value=""></option>
+                    <option value="0">未定义</option>
+                    <option value="1">新增</option>
+                    <option value="2">删除</option>
+                    <option value="3">修改</option>
+                    <option value="4">查询</option>
+                    <option value="5">其他</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="x-red">*</span>接口地址</label>
+            <div class="layui-input-block">
+                <input lay-verify="path" type="text" name="path" placeholder="请输入接口Path"
+                       autocomplete="off" class="layui-input" style="width: 200px;" id="path">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="x-red">*</span>请求方式</label>
+            <div class="layui-input-block" style="width: 100px;">
+                <select name="method" lay-verify="method" id="method">
+                    <option value=""></option>
+                    <option value="0">Get</option>
+                    <option value="1">Post</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">头信息</label>
+            <div class="layui-input-block">
+                <input lay-verify="headers" type="text" name="headers" placeholder="请求输入请求头信息"
+                       autocomplete="off" class="layui-input" style="width: 200px;" id="headers">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">Uri参数</label>
+            <div class="layui-input-block">
+                <input lay-verify="uri_params" type="text" name="uri_params" placeholder="请输入Uri参数"
+                       autocomplete="off" class="layui-input" style="width: 200px;" id="uri_params">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width: 85px;">请求参数:</label>
+            <input type="button" id="add_btn" class="layui-btn layui-btn-mini" style="padding: 0 17px;height: 32px;"
+                   value="添加"/>
+            <input type="button" id="rm_btn" class="layui-btn layui-btn-mini" style="padding: 0 17px;height: 32px;"
+                   value="删除"/>
+        </div>
+        <div class="layui-form-item" id="params">
+            <div class="layui-inline" id="params_div">
+                <label class="layui-form-label">params1</label>
+                <div class="layui-input-inline" style="width: 85px;" id="key_input_div">
+                    <input type="text" name="key_1" placeholder="传参字段" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid">-</div>
+                <div class="layui-input-inline" style="width: 85px;" id="val_input_div">
+                    <input type="text" name="val_1" placeholder="传参值" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">请求体</label>
+            <div class="layui-input-block">
+                <input lay-verify="req_body" type="text" name="req_body" placeholder="请输入请求体"
+                       autocomplete="off" class="layui-input" style="width: 200px;" id="req_body">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="x-red">*</span>是否启用</label>
+            <div class="layui-input-block">
+                <input type="radio" name="state" value="1" title="启用" id="enabled" checked>
+                <input type="radio" name="state" value="0" title="禁用" id="disable">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea name="remark" placeholder="请输入内容" class="layui-textarea" style="width: 400px;"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <blockquote class="layui-elem-quote-sm">创建人: <a id="create_by"></a></blockquote>
+            <blockquote class="layui-elem-quote-sm">创建时间: <a id="createtime"></a></blockquote>
+            <blockquote class="layui-elem-quote-sm">更新人: <a id="update_by"></a></blockquote>
+            <blockquote class="layui-elem-quote-sm">更新时间: <a id="updatetime"></a></blockquote>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+            </label>
+            <button class="layui-btn" lay-filter="edit_api" lay-submit="edit_api">
+                保存
+            </button>
+        </div>
+        <input id="handle_status" value="" hidden="hidden">
+
+    </form>
+</div>
+
+
+<script>
+layui.use('form', function(){
+          var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+          var index = parent.layer.getFrameIndex(window.name);
+          var sub_module=document.getElementById("sub_module");
+          <!--var pro_sys=$('#pro_sys').val();-->
+          <!--$("input:radio[id='pro_sys']").attr('checked','true');-->
+          //自定义验证规则
+          form.verify({
+            api_name: function(value){
+                    if(value.length < 1){
+                        return '接口名不能为空';
+                    }
+             },
+
+            main_module: function(value){
+                    if(value.length < 1){
+                        return '主模块名不能为空';
+                    }
+             },
+
+            module: function(value){
+                    if(value.length < 1){
+                        return '模块名不能为空';
+                    }
+             },
+            sub_module: function(value){
+                    if(value.length < 1){
+                        return '子模块名名不能为空';
+                    }
+             },
+            method: function(value){
+                    if(value.length == null || value.length == ''){
+                        return '请选择请求方式！！';
+                    }
+             },
+            api_type: function(value){
+                    if(value.length == null || value.length == ''){
+                        return '请选择接口类型！！';
+                    }
+             },
+            path: function(value){
+                    if(value.length < 1){
+                        return '请填写接口路径';
+                    }
+             },
+          });
+
+          //监听提交
+          form.on('submit(edit_api)', function(data){
+                var api_id=$('#api_id').text()
+                $.ajax({
+                        type:"post",
+                        url:"{% url 'api_edit' %}",
+                        data: {api_id:api_id,data:data.field},
+                        success: function (res){
+                          if( res==1){
+                            parent.layer.msg("编辑成功!!!");
+                            parent.location.reload();
+                          }else if(res==0){
+                            layer.msg("编辑失败!!!");
+                          }else if(res==2){
+                            parent.layer.msg("其他原因!!!");
+                          }
+                        },
+                        error: function (jqXHR){
+                            parent.layer.alert(jqXHR.responseText);
+                        }
+                 });
+            return false;
+          });
+
+          form.on('select(main_module)', function(data){
+                var api_id=$('#api_id').text();
+                $.ajax({
+                    type: "get",
+                    url: "{% url 'module_list' %}",
+                    data: {main_module:data.value,api_id:api_id},
+                    success: function (res) {
+                        var optionstring = "";
+                        $.each(res.data, function(index, item){
+                            optionstring += "<option value=\"" + item.code + "\" >" + item.name + "</option>";
+                        });
+                        $("#module").html('<option value="">模块</option>' + optionstring);
+                        form.render('select');
+                    },
+                    error: function (jqXHR) {
+                        parent.layer.alert(jqXHR.responseText);
+                    }
+                });
+
+          });
+
+           form.on('select(module)', function(data){
+                 var main_module=$("#main_module").val();
+                 $.ajax({
+                    type: "get",
+                    url: "{% url 'sub_module_list' %}",
+                    data: {module:data.value,main_module:main_module,api_id:api_id},
+                    success: function (res) {
+                        var optionstring = "";
+                        $.each(res.data, function(index, item){
+                            optionstring += "<option value=\"" + item.code + "\" >" + item.name + "</option>";
+                        });
+                        $("#sub_module").html('<option value="">子模块</option>' + optionstring);
+                        form.render('select');
+                    },
+                    error: function (jqXHR) {
+                        parent.layer.alert(jqXHR.responseText);
+                    }
+                });
+
+          });
+          form.render();
+    });
+
+</script>
+
+
+<script>
+    var add_btn=document.getElementById("add_btn");
+    var rm_btn=document.getElementById("rm_btn");
+    var params=document.getElementById("params");
+    var count = 1;
+    function checkCount(boolOK, coun) {
+            if (boolOK == true) {
+                return count++;
+            }
+            else {
+                count--;
+            }
+    }
+    add_btn.onclick=function(){
+           var add_count = checkCount(true, count);
+           //创建div
+           var div = document.createElement("div");
+           div.id ="label"+(count);
+           div.className  = "layui-inline";
+
+           //创建label
+           var label = document.createElement("label");
+           label.className = "layui-form-label";
+           label.innerText = 'params'+(count);
+
+           //创建key_input_div
+           var key_input_div = document.createElement("div");
+           key_input_div.id = "key_input_div"+(count);
+           key_input_div.className  = "layui-input-inline";
+           key_input_div.style="width: 85px";
+
+           //创建input_key
+           var input_key = document.createElement("input");
+           input_key.type = "text";
+           input_key.id = "key_"+(count);
+           input_key.name = "key_"+(count);
+           input_key.className  = "layui-input";
+           input_key.style="width: 85px";
+           input_key.autocomplete="off";
+           input_key.placeholder="传参字段";
+
+           //创建'-'
+           var line_div = document.createElement("div");
+           line_div.className ="layui-form-mid";
+           line_div.innerText = "-";
+
+           //创建val_input_div
+           var val_input_div = document.createElement("div");
+           val_input_div.id = "val_input_div"+(count);
+           val_input_div.className  = "layui-input-inline";
+           val_input_div.style="width: 85px";
+
+           //创建input_val
+           var input_val = document.createElement("input");
+           input_val.type = "text";
+           input_val.id = "val_"+(count);
+           input_val.name = "val_"+(count);
+           input_val.className  = "layui-input";
+           input_val.style="width: 85px";
+           input_val.autocomplete="off";
+           input_val.placeholder="传参值";
+
+           //创建params_div
+           var params_div = document.createElement("div");
+           params_div.id = "params_div"+(count);
+           params_div.className  = "layui-inline";
+
+
+           params_div.appendChild(label);
+           key_input_div.appendChild(input_key);
+           params_div.appendChild(key_input_div);
+           params_div.appendChild(line_div);
+           val_input_div.appendChild(input_val);
+           params_div.appendChild(val_input_div);
+           params.appendChild(params_div);
+    };
+    rm_btn.onclick=function(){
+            var params=document.getElementById("params");
+            var params_div = document.getElementById("params_div"+(count));
+            params.removeChild(params_div);
+            checkCount(false, count);
+    };
+
+</script>
+
+{% endblock %}

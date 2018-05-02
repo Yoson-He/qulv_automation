@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block mainbody %}
+<div style="margin: 15px;">
+    <form class="layui-form">
+        {% csrf_token %}
+        <div class="layui-form-item" >
+            <label class="layui-form-label"><span class="x-red">*</span>数据来源</label>
+            <div class="layui-input-block" style=" width:200px;">
+                <select name="method" lay-verify="api_info_channel" id="api_info_channel" lay-filter="api_info_channel">
+                    <option value=""></option>
+                    <option value="0">网关</option>
+                    <option value="1">Swagger文档</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea name="remarks" placeholder="请输入内容" class="layui-textarea" style="width: 400px;"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+            </label>
+            <button class="layui-btn" lay-filter="import_api" lay-submit="import_api">
+                导入
+            </button>
+        </div>
+        <input id="handle_status" value="" hidden="hidden">
+    </form>
+</div>
+
+
+<script>
+layui.use('form', function(){
+          var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+          var index = parent.layer.getFrameIndex(window.name);
+          var _select = '';
+          //自定义验证规则
+          form.verify({
+            api_info_channel: function(value){
+                    if(value.length < 1){
+                        return '接口名不能为空';
+                    }
+             },
+          });
+          //监听提交
+          form.on('submit(import_api)', function(data){
+                $.ajax({
+                        type:"post",
+                        url:"{% url 'import' %}",
+                        data: data.field,
+                        success: function (res){
+                          if( res==1){
+                            parent.location.reload();
+                          }else if(res==0){
+                            parent.layer.msg("导入失败!!!");
+                          }else if(res==2){
+                            parent.layer.msg("Erro!!!");
+                          }
+                        },
+                        error: function (jqXHR){
+                            parent.layer.alert(jqXHR.responseText);
+                        }
+                 });
+            return false;
+          });
+
+    });
+
+</script>
+{% endblock %}

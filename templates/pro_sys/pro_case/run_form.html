@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block mainbody %}
+<form class="layui-form" action="" method="post" layui-filter="case_form">
+    <div class="layui-form-item layui-hide">
+        <label class="layui-form-label">case_id</label>
+        <div class="layui-input-inline" style="width: 50px">
+            <input type="text" name="case_id" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide" style="margin-top: 5px">
+        <label class="layui-form-label">api_id</label>
+        <div class="layui-input-inline" style="width: 50px">
+            <input type="text" name="api_id" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" style="margin-top: 5px">
+        <label class="layui-form-label">用例名称</label>
+        <div class="layui-input-inline" style="width: 500px">
+            <input type="text" name="case_name"  lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" style="margin-top: 5px">
+        <label class="layui-form-label">接口名称</label>
+        <div class="layui-input-inline" style="width: 500px">
+            <input type="text" name="api_name"  lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">HOST</label>
+        <div class="layui-input-inline" style="width: 500px">
+            <input type="text" name="host"  autocomplete="off" class="layui-input" >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">接口地址</label>
+        <div class="layui-input-inline" style="width: 500px">
+            <input type="text" name="path"  autocomplete="off" class="layui-input" >
+        </div>
+    </div>
+    <div class="layui-form-item ">
+        <label class="layui-form-label">请求类型</label>
+        <div class="layui-input-inline" style="width: 100px">
+            <input type="text" name="method"  autocomplete="off" class="layui-input">
+        </div>
+         <label class="layui-form-label" style="margin-left: -20px">请求头</label>
+         <div class="layui-input-inline" style="width: 300px">
+            <input type="text" name="headers"  autocomplete="off" class="layui-input">
+        </div>
+
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">uri参数</label>
+        <div class="layui-input-inline" style="width: 500px">
+            <input type="text" name="uri_params_value"  autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">传参</label>
+        <div class="layui-input-inline" style="width: 500px">
+            <input type="text" name="req_params_value"  autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label" >请求体</label>
+        <div class="layui-input-block">
+            <textarea name="req_body_value"  placeholder="请输入内容" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">预期结果</label>
+        <div class="layui-input-block">
+            <textarea name="expected_result"  placeholder="请输入内容" class="layui-textarea"></textarea>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

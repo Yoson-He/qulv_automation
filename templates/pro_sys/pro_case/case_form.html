@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block mainbody %}
+<script>
+    //加载下拉选项
+    layui.use('form', function () {
+        var form = layui.form, $ = layui.jquery;
+        $.ajax({
+            type: "get",
+            url: "{% url 'get_module' %}",
+            data: {"type":1},
+            success: function (res) {
+                for (var i in res) {
+                    $("select[name='main_module']").append("<option value=" + i + ">" + res[i] + "</option>");
+                }
+                form.render('select');
+            },
+            error: function (jqXHR) {
+                parent.layer.alert(jqXHR.responseText);
+            }
+        });
+        form.on('select(main_module_select)', function (data) {
+            $.ajax({
+                type: "get",
+                url: "{% url 'get_module' %}",
+                data: {'main_module':data.value,'type':2},
+                success: function (res) {
+                    $("select[name='module'] option[value!='0']").remove();
+                    $("select[name='sub_module'] option[value!='0']").remove();
+                    $("select[name='module']").append("<option value=''>请选择</option>");
+                    for (var i in res) {
+                        $("select[name='module']").append("<option value=" + i + ">" + res[i] + "</option>");
+                    }
+                    form.render('select');
+                },
+                error: function (jqXHR) {
+                    parent.layer.alert(jqXHR.responseText);
+                }
+            });
+        });
+        form.on('select(module_select)', function (data) {
+            $.ajax({
+                type: "get",
+                url: "{% url 'get_module' %}",
+                data: {'module':data.value,'type':3},
+                success: function (res) {
+                    $("select[name='sub_module'] option[value!='0']").remove();
+                    $("select[name='sub_module']").append("<option value=''>请选择</option>");
+                    for (var i in res) {
+                        $("select[name='sub_module']").append("<option value=" + i + ">" + res[i] + "</option>");
+                    }
+                    form.render('select');
+                },
+                error: function (jqXHR) {
+                    parent.layer.alert(jqXHR.responseText);
+                }
+            });
+        });
+    })
+</script>
+<form id="case_form" class="layui-form" action="" method="post" lay-filter="case_form">
+    <div class="layui-form-item layui-hide" style="margin-top: 5px">
+        <label class="layui-form-label">case_id</label>
+        <div class="layui-input-inline" style="width: 50px">
+            <input type="text" name="case_id" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" style="margin-top: 5px">
+        <label class="layui-form-label">用例名称</label>
+        <div class="layui-input-inline" style="width: 500px">
+            <input type="text" name="case_name"  lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+        <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">所属模块</label>
+             <div class="layui-input-inline" style="width: 150px">
+                <select  name="main_module" lay-search lay-filter="main_module_select">
+                    <option value="" >请选择</option>
+                </select>
+            </div>
+            <div class="layui-input-inline" style="width: 150px">
+                <select  name="module" lay-search lay-filter="module_select">
+                    <option value="" >请选择</option>
+                </select>
+            </div>
+            <div class="layui-input-inline" style="width: 150px">
+                <select name="sub_module" lay-search>
+                    <option value="">请选择</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">用例等级</label>
+        <div class="layui-input-inline">
+                <select name="level">
+                    <option value="">请选择</option>
+                    <option value="0">0:接口访问测试</option>
+                    <option value="1">1:接口基础测试（,边界分析，参数组合,异常情况）</option>
+                    <option value="2">2:业务功能测试</option>
+                    <option value="3">3: 性能测试</option>
+                    <option value="4">4:安全测试</option>
+
+                </select>
+            </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">接口</label>
+        <div class="layui-input-inline" style="width: 500px">
+            <input type="text" name="api_id"  autocomplete="off" class="layui-input" >
+        </div>
+        <button id="api_choice" class=" layui-btn layui-btn-small layui-btn-disabled" style="margin-top: 3px" disabled="disabled">选择</button>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">uri参数</label>
+        <div class="layui-input-inline" style="width: 500px">
+            <input type="text" name="uri_params_value"  autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">传参</label>
+        <div class="layui-input-inline" style="width: 500px">
+            <input type="text" name="req_params_value"  autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label" >请求体</label>
+        <div class="layui-input-block">
+            <textarea name="req_body_value"  placeholder="请输入内容" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">预期结果</label>
+        <div class="layui-input-block">
+            <textarea name="expected_result" placeholder="请输入内容" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <textarea name="remark" placeholder="请输入内容" class="layui-textarea"></textarea>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

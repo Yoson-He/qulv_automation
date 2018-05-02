@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% block mainbody %}
+<div>
+    <blockquote class="func-bar">
+        <form class="layui-form" style="float:left;">
+            <div class="layui-form-item" style="margin:0;">
+
+                <label class="func-form-label" style=" width: 55px;">名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="user_name" placeholder="" autocomplete="off" class="func-input">
+                </div>
+                <label class="func-form-label">用户ID</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="user_id" placeholder="" autocomplete="off" class="func-input">
+                </div>
+
+            </div>
+        </form>
+        <button lay-filter="search" class="query-btn" lay-submit><i class="fa fa-search"
+                                                                    aria-hidden="true"></i> 查询
+        </button>
+
+    </blockquote>
+    <hr class="layui-bg-gray">
+    <div id="func_sub_bar" class="func-bar-sub">
+        <button class="add-btn" onclick="show('新增API','/test_api/inv_center_api/add_from/','60%','90%')"><i
+                class="fa fa-plus"></i>添加
+        </button>
+    </div>
+    <hr class="layui-bg-green">
+</div>
+
+<table class="layui-hide" id="inv_center_api" lay-filter="inv_center_api"></table>
+
+<script type="text/html" id="operation_bar">
+    <a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="delete">删除</a>
+</script>
+<script>
+layui.use(['table','form','layer'], function(){
+        var table = layui.table, form = layui.form, $ = layui.jquery, layer = layui.layer;
+        table.render({
+            id: 'inv_center_api'
+            ,elem: '#inv_center_api'
+            ,height:'full-140'
+            ,size: 'sm'
+            ,url: '/test_api/inv_center_api/list/'
+            ,page: true //开启分页
+            ,limit: 10
+            ,limits:[10,30,50,100]
+            ,cols: [[
+                {field:'id',title: '接口ID', width:80, sort: true, fixed: true},
+                {field:'module',title:'所属模块' , width:90},
+                {field:'sub_module',title:'子模块' , width:100},
+                {field:'api_name',title:'接口名' , width:100},
+                {field:'api_type',title:'接口类型' , width:78,align:'center'},
+                {field:'method',title:'请求类型' , width:80,align:'center'},
+                {field:'path',title:'接口地址' , width:100},
+                {field:'headers',title:'请求头' , width:100},
+                {field:'uri_params',title:'uri传参' , width:100},
+                {field:'req_params',title:'请求传参' , width:100},
+                {field:'req_body',title:'请求体' , width:100},
+                {field:'state',title:'接口状态' , width:85,align:'center'},
+                {field:'create_by',title:'创建人' , width:100},
+                {field:'createtime',title:'创建时间' , width:100},
+                {field:'update_by',title:'更新人' , width:100},
+                {field:'updatetime',title:'更新时间' , width:100},
+                {field:'remark',title:'备注' , width:100},
+                {fixed: 'right',width:150, align:'center', toolbar: '#operation_bar'}
+            ]]
+            ,done: function(res){
+                //如果是异步请求数据方式，res即为你接口返回的信息。
+                //接口类型
+                $("[data-field='api_type']").children().each(function(){
+                        if($(this).text()=='0'){
+                           $(this).text("未定义")
+                        }else if($(this).text()=='1'){
+                           $(this).text("新增")
+                        }else if($(this).text()=='2'){
+                           $(this).text("删除")
+                        }else if($(this).text()=='3'){
+                           $(this).text("修改")
+                        }else if($(this).text()=='4'){
+                           $(this).text("查询")
+                        }else if($(this).text()=='5'){
+                           $(this).text("其他")
+                           }
+                        });
+                //请求类型
+                $("[data-field='method']").children().each(function(){
+                        if($(this).text()=='0'){
+                           $(this).text("Get")
+                        }else if($(this).text()=='1'){
+                           $(this).text("Post")
+                           }
+                        });
+                //接口状态
+                $("[data-field='state']").children().each(function(){
+                        if($(this).text()=='0'){
+                           $(this).text("禁用")
+                        }else if($(this).text()=='1'){
+                           $(this).text("启用")
+                           }
+                        });
+            }
+        });
+
+        //监听工具条
+        table.on('tool(inv_center_api)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var layEvent = obj.event; //获得 lay-event 对应的值
+            var data = obj.data;
+            if (layEvent === 'delete'){
+                layer.confirm('确认删除？', function(index){
+                       $.ajax({
+                        type:"post",
+                        url:"/test_api/inv_center_api/delete/",
+                        data: {id:data.id},
+                        success: function (res){
+                          if( res==1){
+                            layer.msg("删除成功!!!");
+                            table.reload('inv_center_api');
+                          }else if(res==0){
+                            layer.msg("删除失败!!!");
+                          }
+                        },
+                        error: function (jqXHR){
+                            parent.layer.alert(jqXHR.responseText);
+                        }
+                        });
+                });
+            } else if(layEvent === 'edit'){
+                 layer.open({
+                                type: 2
+                                ,title: '接口信息修改'
+                                ,area: ['900px', '600px']
+                                ,content:'/test_api/inv_center_api/edit_from/'
+                                ,data:{id:data.id}
+                                ,btnAlign: 'r' //按钮右对齐
+                                ,shade: 0.3 //遮罩透明度
+                                ,success: function(layero, index){
+                                     var req_params=data.req_params;
+                                     var req_params_str = req_params.toString();
+                                     var rr=req_params_str.replace("{","");
+                                     var s=rr.replace("}","");
+                                     var strs= new Array();
+                                     var strs=s.split(":");
+                                     layer.msg(strs.toString());
+                                     layer.getChildFrame('form').find('label[id=api_id]').text(data.id);
+                                     layer.getChildFrame('form').find('select[name="module"]').next().find("dd[lay-value="+data.module+"]").click();
+                                     layer.getChildFrame('form').find('select[name="sub_module"]').next().find("dd[lay-value="+data.sub_module+"]").click();
+                                     layer.getChildFrame('form').find('input[id="api_name"]').val(data.api_name);
+                                     layer.getChildFrame('form').find('select[id="api_type"]').next().find("dd[lay-value="+data.api_type+"]").click();
+                                     layer.getChildFrame('form').find('select[id="method"]').next().find("dd[lay-value="+data.method+"]").click();
+                                     layer.getChildFrame('form').find('input[name="path"]').val(data.path);
+                                     layer.getChildFrame('form').find('input[id="headers"]').val(data.headers);
+                                     layer.getChildFrame('form').find('input[id=uri_params]').val(data.uri_params);
+                                     layer.getChildFrame('form').find('input[id=req_params]').val(data.req_params);
+                                     layer.getChildFrame('form').find('input[id=req_body]').val(data.req_body);
+                                     layer.getChildFrame('form').find('a[id=create_by]').text(data.create_by);
+                                     layer.getChildFrame('form').find('a[id=createtime]').text(data.createtime);
+                                     layer.getChildFrame('form').find('a[id=update_by]').text(data.update_by);
+                                     layer.getChildFrame('form').find('a[id=updatetime]').text(data.updatetime);
+                                     layer.getChildFrame('form').find('input[id="method"]').next().find("dd[lay-value="+data.method+"]").click();
+                                     layer.getChildFrame('form').find('textarea[name=remark]').text(data.remark);
+                                }
+
+                 });
+                        form.render();
+            }
+        });
+    });
+
+
+
+</script>
+{% endblock %}

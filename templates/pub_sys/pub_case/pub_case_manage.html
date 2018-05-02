@@ -1,0 +1,324 @@
+{% extends "base.html" %}
+{% block mainbody %}
+
+<form style="margin-top: 10px; margin-bottom: -10px; margin-left: -40px" class="layui-form" action="">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label" style="margin-left: 20px">用例等级</label>
+            <div class="layui-input-inline" style="width: 100px">
+                <select name="level">
+                    <option value="">请选择</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label" style="margin-left: -60px">搜索</label>
+            <input style="width: 400px" type="text" name="query_str" placeholder="用例id、用例名称、接口" autocomplete="off"
+                   class="layui-input">
+        </div>
+        <button class="layui-btn layui-btn-small" lay-submit lay-filter="case_query" style="margin-bottom: 5px">查询
+        </button>
+    </div>
+</form>
+
+<button id="case_add_btn" data-method="offset" data-type="auto" class="layui-btn layui-btn-small"
+        style="margin-left: 10px;margin-bottom:-5px">新增用例
+</button>
+<button id="run_more" class="layui-btn layui-btn-small" style="margin-left: 10px;margin-bottom:-5px">批量运行</button>
+
+<table id="case_list" lay-filter="case_table"></table>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-mini layui-btn-normal" lay-event="case_run">RUN</a>
+    <a class="layui-btn layui-btn-mini " lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
+</script>
+
+<script>
+    layui.use(['table', 'form', 'layer'], function () {
+        var table = layui.table, form = layui.form, $ = layui.jquery, layer = layui.layer;
+
+        //加载数据
+        table.render({
+            elem: '#case_list'
+            , height: 'full-100'
+            //,width:1000
+            , size: 'sm'
+            , url: "{% url 'pub_case_query' %}" //数据接口
+            , page: true //开启分页
+            , limit: 30
+            , initSort: {field:'case_id', type:'desc'}
+            , cols: [[ //表头
+                {field: 'checkbox', title: ' ', checkbox: true, fixed: true},
+                {field: 'case_id', title: 'id', width: 50, sort: true},
+                {field: 'case_name', title: '用例名称', width: 200},
+                {field: 'level', title: '用例等级', width: 80},
+                {field: 'path', title: '接口地址', width: 300},
+                {field: 'uri_params_value', title: 'uri参数', width: 200},
+                {field: 'req_params_value', title: '传参', width: 200},
+                {field: 'req_body_value', title: '请求体', width: 300},
+                {field: 'expected_result', title: '预期结果', width: 300},
+                {field: 'remark', title: '备注', width: 200},
+                {fixed: 'right', width: 160, align: 'center', toolbar: '#barDemo'}
+            ]]
+            , id: 'caseListLoad'
+        });
+
+        //查询
+        form.on('submit(case_query)', function (data) {
+            var level = data.field['level'], query_str = data.field['query_str'];
+            table.reload('caseListLoad', {
+                where: {
+                    level: level,
+                    query_str: query_str
+                }
+                , page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+            return false;
+        });
+
+        //新增
+        var active = {
+            offset: function (othis) {
+                var type = othis.data('type')
+                    , text = othis.text();
+                layer.open({
+                    type: 2
+                    , offset: type
+                    , id: 'layerDemo' + type //防止重复弹出
+                    , title: text
+                    , area: ['700px', '500px']
+                    , content: "{% url 'pub_case_form' %}"
+                    , btn: ['保存', '取消']
+                    , btnAlign: 'r' //按钮右对齐
+                    , shade: 0.3 //遮罩透明度
+                    , yes: function (index) {
+                        var i = $('.layui-laypage-skip').find('input').val();
+                        $.ajax({
+                            type: "post",
+                            url: "{% url 'pub_case_add' %}",
+                            data: layer.getChildFrame('form').serialize(),
+                            success: function (res) {
+                                if (res == 1) {
+                                    layer.close(index);
+                                    $('.layui-laypage-skip').find('input').val(i);
+                                    $('.layui-laypage-skip').find('button').click();
+                                    parent.layer.msg("新增成功！");
+                                } else if (res == 0) {
+                                    parent.layer.msg("新增失败！");
+                                } else if (res == 'case_name') {
+                                    parent.layer.msg("请输入用例名称");
+                                } else if (res == 'level') {
+                                    parent.layer.msg("请选择用例等级！");
+                                } else if (res == 'expected_result') {
+                                    parent.layer.msg("请输入预期结果！");
+                                }else if (res == 'api_id') {
+                                    parent.layer.msg("请选择接口！");
+                                }
+                            },
+                            error: function (jqXHR) {
+                                parent.layer.alert(jqXHR.responseText);
+                            }
+                        });
+                    }
+
+
+                });
+            }
+        };
+        $('#case_add_btn').on('click', function () {
+            var othis = $(this), method = othis.data('method');
+            active[method] ? active[method].call(this, othis) : '';
+        });
+
+        //监听工具条：RUN、编辑、删除
+        table.on('tool(case_table)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var layEvent = obj.event, data = obj.data; //获得 lay-event 对应的值
+
+            //删除
+            if (layEvent === 'del') {
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del(); //删除对应行（tr）的DOM结构
+                    layer.close(index);
+                    $.ajax({
+                        type: "get",
+                        url: "{% url 'pub_case_delete' %}",
+                        data: {'case_id': data.case_id},
+                        success: function (res) {
+                            if (res == 1) {
+                                layer.close(index);
+                                parent.layer.msg("删除成功！");
+                            } else if (res == 0) {
+                                parent.layer.msg("删除失败！");
+                            }
+                        },
+                        error: function (jqXHR) {
+                            parent.layer.alert(jqXHR.responseText);
+                        }
+                    });
+                });
+            }
+
+            //编辑
+            else if (layEvent === 'edit') {
+                layer.open({
+                    type: 2
+                    , title: '修改用例'
+                    , area: ['700px', '500px']
+                    , content: "{% url 'pub_case_form' %}"
+                    , btn: ['保存', '取消']
+                    , btnAlign: 'r' //按钮右对齐
+                    , shade: 0.3 //遮罩透明度
+                    , success: function () {
+                        layer.getChildFrame('form').find("input[name='case_id']").val(data.case_id);
+                        layer.getChildFrame('form').find("input[name='case_name']").val(data.case_name);
+                        layer.getChildFrame('form').find("select[name='level']").next().find("dd[lay-value=" + data.level + "]").click();
+                        layer.getChildFrame('form').find("input[name='api_id']").val(data.api_id);
+                        layer.getChildFrame('form').find("input[name='path']").val(data.path);
+                        layer.getChildFrame('form').find("input[name='uri_params_value']").val(data.uri_params_value);
+                        layer.getChildFrame('form').find("input[name='req_params_value']").val(data.req_params_value);
+                        layer.getChildFrame('form').find("textarea[name='req_body_value']").val(data.req_body_value);
+                        layer.getChildFrame('form').find("textarea[name='expected_result']").val(data.expected_result);
+                        layer.getChildFrame('form').find("textarea[name='remark']").val(data.remark);
+                    }
+                    , yes: function (index) {
+                        var i = $('.layui-laypage-skip').find('input').val();
+                        $.ajax({
+                            type: "post",
+                            url: "{% url 'pub_case_update' %}",
+                            data: layer.getChildFrame('form').serialize(),
+                            success: function (res) {
+                                if (res == 1) {
+                                    layer.close(index);
+                                    $('.layui-laypage-skip').find('input').val(i);
+                                    $('.layui-laypage-skip').find('button').click();
+                                    parent.layer.msg("修改成功！");
+                                } else if (res == 0) {
+                                    layer.close(index);
+                                    parent.layer.msg("未做任何修改！");
+                                } else if (res == 'case_name') {
+                                    parent.layer.msg("请输入用例名称");
+                                } else if (res == 'level') {
+                                    parent.layer.msg("请选择用例等级！");
+                                } else if (res == 'expected_result') {
+                                    parent.layer.msg("请输入预期结果！");
+                                } else if (res == 'api_id') {
+                                    parent.layer.msg("请选择接口！");
+                                }
+                            },
+                            error: function (jqXHR) {
+                                parent.layer.alert(jqXHR.responseText);
+                            }
+                        });
+
+                    }
+                });
+            }
+
+            //RUN
+            else if (layEvent === 'case_run') {
+                //获取用例对应的api信息
+                function api_query(api_id, index) {
+                    $.ajax({
+                        type: "get",
+                        url: "{% url 'pub_api_query' %}",
+                        data: {'api_id': api_id},
+                        success: function (res) {
+                            if (res == 'API不存在') layer.alert('关联的API不存在！');
+                            layer.getChildFrame('form', index).find("input[name='api_name']").val(res.api_name);
+                            if (res.method == 1) layer.getChildFrame('form', index).find("input[name='method']").val('POST');
+                            if (res.method == 0) layer.getChildFrame('form', index).find("input[name='method']").val('GET');
+                            layer.getChildFrame('form', index).find("input[name='path']").val(res.path);
+                            layer.getChildFrame('form', index).find("input[name='headers']").val(res.headers);
+                        },
+                        error: function (jqXHR) {
+                            parent.layer.alert(jqXHR.responseText);
+                        }
+                    });
+                }
+
+                //执行用例
+                layer.open({
+                    type: 2
+                    , title: '执行用例'
+                    , area: ['800px', '500px']
+                    , content: "{% url 'pub_run_form' %}"
+                    , btn: ['RUN', '取消']
+                    , btnAlign: 'r' //按钮右对齐
+                    , shade: 0.3 //遮罩透明度
+                    , success: function (layero, index) {
+                        api_query(data.api_id, index);
+                        layer.getChildFrame('form', index).find("input[name='case_id']").val(data.case_id);
+                        layer.getChildFrame('form', index).find("input[name='api_id']").val(data.api_id);
+                        layer.getChildFrame('form', index).find("input[name='case_name']").val(data.case_name);
+                        layer.getChildFrame('form', index).find("input[name='uri_params_value']").val(data.uri_params_value);
+                        layer.getChildFrame('form', index).find("input[name='req_params_value']").val(data.req_params_value);
+                        layer.getChildFrame('form', index).find("textarea[name='req_body_value']").val(data.req_body_value);
+                        layer.getChildFrame('form', index).find("textarea[name='expected_result']").val(data.expected_result);
+                    }
+                    , yes: function (index, layero) {
+                        $.ajax({
+                            type: "post",
+                            url: "{% url 'pub_case_run' %}",
+                            data: layer.getChildFrame('form').serialize(),
+                            success: function (res) {
+                                if (res == 'host') {
+                                    layer.msg('请输入HOST！')
+                                }
+                                else if (res == 'path') {
+                                    layer.msg('请输入接口地址！')
+                                }
+                                else if (res == 'uri_params_value') {
+                                    layer.msg('请输入HOST！')
+                                }
+                                else if (res == 'uri参数个数不匹配') {
+                                    layer.msg('uri参数个数不匹配！')
+                                }
+                                else if (res == '预期结果格式输入有误') {
+                                    layer.msg('预期结果格式输入有误！')
+                                }
+                                else if (res == '请求头格式有误') {
+                                    layer.msg('请求头格式有误！')
+                                }
+                                else {
+                                    layer.open({
+                                        type: 2
+                                        , title: '运行结果'
+                                        , area: ['800px', '500px']
+                                        , content: "{% url 'pub_result_form'%}"
+                                        , btn: ['确定']
+                                        , btnAlign: 'r' //按钮右对齐
+                                        , shade: 0.3 //遮罩透明度
+                                        , success: function (layero, index) {
+                                            layer.getChildFrame('form', index).find("input[name='case_id']").val(data.case_id);
+                                            layer.getChildFrame('form', index).find("input[name='api_id']").val(data.api_id);
+                                            layer.getChildFrame('form', index).find("input[name='pass_or_fail']").val(res.pass_or_fail);
+                                            layer.getChildFrame('form', index).find("input[name='status_code']").val(res.status_code);
+                                            layer.getChildFrame('form', index).find("input[name='url']").val(res.url);
+                                            layer.getChildFrame('form', index).find("textarea[name='response_body']").val(res.response_body);
+                                            layer.getChildFrame('form', index).find("textarea[name='actual_result']").val(res.actual_result);
+                                            layer.getChildFrame('form', index).find("textarea[name='headers']").val(res.headers);
+                                            layer.getChildFrame('form', index).find("textarea[name='expected_result']").val(data.expected_result);
+                                        }
+                                    })
+                                }
+                            },
+                            error: function (jqXHR) {
+                                parent.layer.alert(jqXHR.responseText);
+                            }
+                        });
+
+                    }
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

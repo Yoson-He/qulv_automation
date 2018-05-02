@@ -1,0 +1,137 @@
+一、框架搭建
+1、创建项目
+django-admin startproject 项目名
+2、创建模块
+python manage.py startapp 模块名
+3、修改views.py
+4、修改urls.py
+5、启动项目
+python manage.py migrate
+python manage.py runserver
+python manage.py runserver 0.0.0.0:8000
+
+6、安装mysql（因为版本差异及环境变量，有可能需要此步）
+pip install mysql-python
+pip install PyMySQL
+7、在主项目底下的_init_.py添加
+import pymysql
+pymysql.install_as_MySQLdb()
+8、修改settings
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME':'db_name' ,
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+    }
+
+}
+
+
+
+二、前端Bootstrap
+1、安装django-bootstrap-toolkit或django-bootstrap-static
+pip install django-bootstrap-toolkit
+pip install django-bootstrap-static
+2、配置settings
+*在import os下方加入
+HERE = os.path.dirname(os.path.abspath(__file__))
+HERE = os.path.join(HERE, '../')
+*加入引导
+STATICFILES_DIRS = (
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(HERE, 'static/'),  # 此处必须，为新添加
+
+）
+
+
+
+三、配置mysql Model
+
+1、修改setting.py配置
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '', # 数据库名称，如果使用sqlite3，则输入数据库文件路径，如'/xxx/xxx/mydata.
+        'USER': '', # Not used with sqlite3.
+        'PASSWORD': '', # Not used with sqlite3.
+        'HOST': '127.0.0.1', # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '3306', # Set to empty string for default. Not used with sqlite3.
+    }
+}
+
+2、生成Django自带的表
+cd
+python manage.py makemigrations
+python manage.py migrate
+
+
+
+
+
+
+四、Django-自带后台管理系统
+
+1、创建超级用户
+
+python manage.py createsuperuser
+
+2、配置账号
+# python manage.py createsuperuser
+Username (leave blank to use 'root'): admin
+Email address: admin@admin.com
+Password:
+Password (again):
+Superuser created successfully.
+[root@solar HelloWorld]#
+
+3、忘记密码
+python manage.py shell
+
+from django.contrib.auth.models import User
+user = User.objects.get(username='admin')
+user.set_password('new_password')
+user.save()
+
+4、make Or Check 密码
+python manage.py shell
+from django.contrib.auth.hashers import make_password, check_password
+make_password("XXX", None, 'pbkdf2_sha256')
+make_password("XXX")
+check_password("XXX", '加密后的password')
+
+
+
+五、解决Django自带的MySQLdb，不支持python3的问题
+
+vim /usr/lib/python3.4/site-packages/django/db/backends/mysql/base.py
+
+导入
+在from django.utils.safestring import SafeBytes, SafeText下添加下面两条
+import pymysql
+pymysql.install_as_MySQLdb()
+
+方法解析：
+MySQLdb只支持Python2.*，还不支持3.*
+可以用PyMySQL代替。安装方法：pip install PyMySQL
+
+然后在需要的项目中，把 __init__.py中添加两行：
+import pymysql
+pymysql.install_as_MySQLdb()
+就可以用 import MySQLdb了。其他的方法与MySQLdb一样。
+
+
+
+
+
+
+
+
+
+
+
+

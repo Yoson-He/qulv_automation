@@ -1,0 +1,53 @@
+1. md5加密
+hash = hashlib.md5()
+hash.update('admin'.encode('utf-8'))
+print(hash.hexdigest())
+21232f297a57a5a743894a0e4a801fc3
+
+2. sha1加密
+*
+hash = hashlib.sha1()
+hash.update('admin'.encode('utf-8'))
+print(hash.hexdigest())
+d033e22ae348aeb5660fc2140aec35850c4da997
+*
+hash_new = hashlib.sha1(b'123456')  # 或hashlib.md5()
+hash_value = hash_new.hexdigest()  # 生成40位(sha1)或32位(md5)的十六进制字符串
+print(hash_value)
+
+
+3. sha256加密
+hash = hashlib.sha256()
+hash.update('admin'.encode('utf-8'))
+print(hash.hexdigest())
+8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+
+4. sha384加密
+hash = hashlib.sha384()
+hash.update('admin'.encode('utf-8'))
+print(hash.hexdigest())
+9ca694a90285c034432c9550421b7b9dbd5c0f4b6673f05f6dbce58052ba20e4248041956ee8c9a2ec9f10290cdc0782
+
+5. sha512加密
+hash = hashlib.sha512()
+hash.update('admin'.encode('utf-8'))
+print(hash.hexdigest())
+c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec
+
+6. ‘加盐’加密
+######  md5 加密 ############
+hash = hashlib.md5('python'.encode('utf-8'))
+hash.update('admin'.encode('utf-8'))
+print(hash.hexdigest())
+75b431c498b55557591f834af7856b9f
+
+7. hmac加密
+import hmac
+h = hmac.new('python'.encode('utf-8'))
+h.update('helloworld'.encode('utf-8'))
+print(h.hexdigest())
+b3b867248bb4cace835b59562c39fd55
+
+
+
+js前端

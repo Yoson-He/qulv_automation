@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block mainbody %}
+
+<div style="margin: 15px;">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="x-red">*</span>用户名</label>
+            <div class="layui-input-block">
+                <input lay-verify="user_name" type="text" name="user_name" placeholder="用户名" id="user_name"
+                       autocomplete="off" class="layui-input" style="width: 200px;">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">真实姓名</label>
+            <div class="layui-input-block">
+                <input lay-verify="" type="text" name="realName" placeholder="真实姓名"
+                       autocomplete="off" class="layui-input" style="width: 200px;">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="password" class="layui-form-label"><span class="x-red">*</span>密码</label>
+            <div class="layui-input-inline">
+                <input type="password" id="password" lay-verify="pass" placeholder="输入密码"
+                       autocomplete="off" class="layui-input" style="width: 200px;">
+            </div>
+            <div class="layui-form-mid layui-word-aux">&nbsp;&nbsp;&nbsp;6-8位的数字和字母组合</div>
+        </div>
+        <div class="layui-form-item">
+            <label for="repass" class="layui-form-label">
+                <span class="x-red">*</span>确认密码
+            </label>
+            <div class="layui-input-inline">
+                <input type="password" id="repass" name="repass" lay-verify="repass" placeholder="确认密码"
+                       autocomplete="off" class="layui-input" style="width: 200px;">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">系统权限</label>
+            <div class="layui-input-block" style="width: 100px;">
+                <select name="user_role" lay-verify="user_role" id="user_role">
+                    <option value=""></option>
+                    <option value="0">游客</option>
+                    <option value="8">测试人员</option>
+                    <option value="9">系统管理员</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否启用</label>
+            <div class="layui-input-block">
+                <input type="radio" name="state" value="1" title="启用" checked="">
+                <input type="radio" name="state" value="0" title="禁用">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea name="remarks" placeholder="请输入内容" class="layui-textarea" style="width: 400px;"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="repass" class="layui-form-label">
+            </label>
+            <button class="layui-btn" lay-filter="add_user" lay-submit="">
+                保存
+            </button>
+        </div>
+        <input id="handle_status" value="" hidden="hidden">
+    </form>
+</div>
+
+
+<script>
+layui.use('form', function(){
+          var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+          var index = parent.layer.getFrameIndex(window.name);
+          //自定义验证规则
+          form.verify({
+            user_name: function(value){
+                    if(value.length < 3){
+                        return '用户名至少输入3个字符';
+                    }
+                    if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
+                         return '用户名不能有特殊字符';
+                    }
+                    if(/(^\_)|(\__)|(\_+$)/.test(value)){
+                         return '用户名首尾不能出现下划线\'_\'';
+                    }
+                    if(/^\d+\d+\d$/.test(value)){
+                         return '用户名不能全为数字';
+                    }
+             },
+            pass: [/^[\S]{6,8}$/,'密码必须6到8位，且不能出现空格'],
+            repass: function(value){
+              var repassvalue = $('#password').val();
+              if(value != repassvalue){
+                  return '两次输入的密码不一致!';
+              }
+            },
+            user_role:function(value){
+              if(value.length == null || value.length == ''){
+                return '请选择角色权限！！';
+              }
+            },
+          });
+
+          //监听提交
+          form.on('submit(add_user)', function(data){
+                $.ajax({
+                        type:"post",
+                        url:"/user_from/add/",
+                        data: {user_name:$('#user_name').val(),realName:$('#realName').val(),repass:$('#repass').val(),user_role:$('#user_role option:selected').val()},
+                        success: function (res){
+                          if( res==1){
+                            parent.location.reload();
+                          }else if(res==0){
+                            parent.layer.msg("添加失败!!!");
+                          }else if(res==2){
+                            parent.layer.msg("用户名已存在!!!");
+                          }
+                        },
+                        error: function (jqXHR){
+                            parent.layer.alert(jqXHR.responseText);
+                        }
+                 });
+            return false;
+          });
+          form.render();
+    });
+
+
+
+
+</script>
+
+
+{% endblock %}

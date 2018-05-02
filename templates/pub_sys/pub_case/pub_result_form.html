@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block mainbody %}
+<form class="layui-form" action="" method="post" layui-filter="case_form">
+    <div class="layui-form-item layui-hide">
+        <label class="layui-form-label">case_id</label>
+        <div class="layui-input-inline" style="width: 50px">
+            <input type="text" name="case_id" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide" style="margin-top: 5px">
+        <label class="layui-form-label">api_id</label>
+        <div class="layui-input-inline" style="width: 50px">
+            <input type="text" name="api_id" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" style="margin-top: 5px">
+        <label class="layui-form-label">是否通过</label>
+        <div class="layui-input-inline" style="width: 50px">
+            <input type="text" name="pass_or_fail"  autocomplete="off" class="layui-input" >
+        </div>
+        <label class="layui-form-label">状态码</label>
+        <div class="layui-input-inline" style="width: 50px">
+            <input type="text" name="status_code"  autocomplete="off" class="layui-input" >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">URL</label>
+        <div class="layui-input-inline" style="width: 500px">
+            <input type="text" name="url"  autocomplete="off" class="layui-input" >
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">Headers</label>
+        <div class="layui-input-block">
+            <textarea name="headers"  placeholder="请输入内容" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">返回值</label>
+        <div class="layui-input-block">
+            <textarea name="response_body"  placeholder="请输入内容" class="layui-textarea" style="height: 150px"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">运行结果</label>
+        <div class="layui-input-block">
+            <textarea name="actual_result" placeholder="请输入内容" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text layui-hide">
+        <label class="layui-form-label">预期结果</label>
+        <div class="layui-input-block">
+            <textarea name="expected_result" placeholder="请输入内容" class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+</form>
+{% endblock %}

@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block mainbody %}
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">QuLv-测试管理系统</div>
+        <ul class="layui-nav layui-layout-right kit-nav">
+            <li class="layui-nav-item">
+                <a class="">当前登录用户：{{user_name}}</a>
+            </li>
+            <li class="logout-button" onclick="logout()">&nbsp;退出</li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black kit-side">
+        <div class="layui-side-scroll">
+            <div class="kit-side-fold"><i class="fa fa-navicon" aria-hidden="true"></i></div>
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree layui-bg-molv" lay-filter="kitNavbar" kit-navbar>
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;"><i class="fa fa-desktop icon">&nbsp;&nbsp;</i><span>系统管理</span></a>
+                    <dl class="layui-nav-child" style="margin-left: -9px;">
+                        <dd>
+                            <a href="javascript:;" kit-target
+                               data-options="{url:'sys_user/',icon:'fa-user',title:'账号管理',id:'sys_user_account'}">
+                                <i class="fa fa-user">&nbsp;&nbsp;</i><span>账号管理</span></a>
+                        </dd>
+                        <dd>
+                            <a href="javascript:;" data-url="" data-icon="fa-gears" data-title="菜单管理" kit-target
+                               data-id='2'><i class="fa fa-gears" aria-hidden="true">&nbsp;&nbsp;</i><span> 菜单管理</span></a>
+                        </dd>
+                        <dd>
+                            <a href="javascript:;" kit-target
+                               data-options="{url:'https://www.baidu.com',icon:'fa-paw',title:'百度一下',id:'5'}"><i
+                                    class="fa fa-paw">&nbsp;&nbsp;</i><span> 百度一下</span></a>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <!--## layui-nav-itemed(active) ##-->
+                    <a href="javascript:;"><i class="fa fa-tasks" aria-hidden="true">&nbsp;&nbsp;</i><span>测试任务管理</span></a>
+                    <dl class="layui-nav-child" style="margin-left: -9px;">
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-folder',title:'测试用例管理',id:'test_case_management'}"><i
+                                class="fa fa-folder">&nbsp;&nbsp;</i><span>测试用例管理</span>
+                        </a>
+                        </dd>
+
+                        <li class="layui-nav-item layui-nav-item-sub" style="margin-left: -9px;">
+                            <a href="javascript:;"
+                               data-options="{url:'',icon:'fa-sliders',title:'API接口管理',id:'api_management'}"
+                               style="background-color: white;">
+                                <i class="fa fa-sliders">&nbsp;&nbsp;</i><span> API接口管理</span></a>
+                            <dl class="layui-nav-child layui-nav-child-sub" style="margin-left: -9px;">
+                                <dd class="layui-nav-item layui-nav-item-sub">
+                                    <a href="javascript:;" kit-target
+                                       data-options="{url:'',icon:'fa-star',title:'Swagger_api',id:'swagger_api'}"><i
+                                            class="fa fa-star">&nbsp;&nbsp;</i><span>Swagger_api</span></a></dd>
+                                <dd class="layui-nav-item layui-nav-item-sub">
+                                    <a href="javascript:;" kit-target
+                                       data-options="{url:'',icon:'fa-star',title:'q_boss_api',id:'q_boss_api'}"><i
+                                            class="fa fa-star">&nbsp;&nbsp;</i><span>q_boss_api</span></a></dd>
+                            </dl>
+                        </li>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><i class="fa fa-fire"
+                                              aria-hidden="true">&nbsp;&nbsp;</i><span>UI 自动化</span></a>
+                    <dl class="layui-nav-child" style="margin-left: -9px;">
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'http://qhub.next.qulv.com/',icon:'fa-toggle-right',title:'UI 自动化',id:'ui_automation'}"><i
+                                class="fa fa-toggle-right">&nbsp;&nbsp;</i><span>UI 自动化</span></a></dd>
+
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><i class="fa fa-diamond"
+                                              aria-hidden="true">&nbsp;&nbsp;</i><span>API 自动化</span></a>
+                    <dl class="layui-nav-child" style="margin-left: -9px;">
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-cube',title:'API 单元测试',id:'api_unit_test'}"><i
+                                class="fa fa-cube">&nbsp;&nbsp;</i><span>API 单元测试</span></a></dd>
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-cubes',title:'API 自动化测试',id:'api_test'}"><i
+                                class="fa fa-cubes">&nbsp;&nbsp;</i><span>API 自动化测试</span></a>
+                        </dd>
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-bar-chart-o',title:'测试结果',id:'test_data'}"><i
+                                class="fa fa-bar-chart-o">&nbsp;&nbsp;</i><span>测试结果</span></a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><i class="fa fa-server" aria-hidden="true">&nbsp;&nbsp;</i><span>服务管理</span></a>
+                    <dl class="layui-nav-child" style="margin-left: -9px;">
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-clock-o',title:'定时任务',id:'timed_task'}"><i
+                                class="fa fa-clock-o">&nbsp;&nbsp;</i><span>定时任务</span></a></dd>
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-leaf',title:'服务监控',id:'service_monitoring'}"><i
+                                class="fa fa-leaf">&nbsp;&nbsp;</i><span>服务监控</span></a>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><i class="fa fa-wrench"
+                                              aria-hidden="true">&nbsp;&nbsp;</i><span>DevOps</span></a>
+                    <dl class="layui-nav-child" style="margin-left: -9px;">
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-list-ol',title:'版本管理',id:'version_management'}"><i
+                                class="fa fa-list-ol">&nbsp;&nbsp;</i><span>版本管理</span></a></dd>
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-database',title:'数据库操作',id:'db_handler'}"><i
+                                class="fa fa-database">&nbsp;&nbsp;</i><span>数据库操作</span></a>
+                        </dd>
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-support',title:'辅助功能',id:'suport'}"><i
+                                class="fa fa-support">&nbsp;&nbsp;</i><span>辅助功能</span></a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><i class="fa fa-cloud"
+                                              aria-hidden="true">&nbsp;&nbsp;</i><span>数据分析</span></a>
+                    <dl class="layui-nav-child" style="margin-left: -9px;">
+                        <dd><a href="javascript:;" kit-target
+                               data-options="{url:'',icon:'fa-pie-chart',title:'图形报表',id:'data_chart'}"><i
+                                class="fa fa-pie-chart">&nbsp;&nbsp;</i><span>图形报表</span></a></dd>
+
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="layui-body" id="container">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">主体内容加载中,请稍等...</div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+
+        <a href="www.qulv.com" style="margin-left: 560px;"> 2017 - qulv 测试系统 </a>
+
+    </div>
+</div>
+
+{% endblock %}

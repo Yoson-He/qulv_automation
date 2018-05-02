@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QuLv 测试管理系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,400' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'>
+    <!-- CSS Libs -->
+    <link rel="stylesheet" type="text/css" href="/static/libs/public/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/libs/public/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/libs/public/css/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/libs/public/css/bootstrap-switch.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/libs/public/css/checkbox3.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/libs/public/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/libs/public/css/dataTables.bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/static/libs/public/css/select2.min.css">
+    <!-- CSS App -->
+    <link rel="stylesheet" type="text/css" href="/static/libs/public/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/static/libs/public/css/flat-blue.css">
+    <!-- Javascript Libs -->
+    <script type="text/javascript" src="/static/libs/public/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/libs/public/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/libs/public/js/Chart.min.js"></script>
+    <script type="text/javascript" src="/static/libs/public/js/bootstrap-switch.min.js"></script>
+    <script type="text/javascript" src="/static/libs/public/js/jquery.matchHeight-min.js"></script>
+    <script type="text/javascript" src="/static/libs/public/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="/static/libs/public/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/libs/public/js/select2.full.min.js"></script>
+    <script type="text/javascript" src="/static/libs/public/js/ace.js"></script>
+    <script type="text/javascript" src="/static/libs/public/js/mode-html.js"></script>
+    <script type="text/javascript" src="/static/libs/public/js/theme-github.js"></script>
+    <!-- Javascript -->
+    <script type="text/javascript" src="/static/libs/public/js/app.js"></script>
+    <script type="text/ecmascript" src="/static/libs/public/js/md5.js"></script>
+    <script type="text/ecmascript" src="/static/libs/public/js/sha1.js"></script>
+    <script type="text/ecmascript" src="/static/qulv_test/js/sys_admin.js"></script>
+
+
+</head>
+
+<body class="flat-blue login-page" onkeydown="if (event.keyCode == 13)login();">
+<div class="container">
+    <div class="login-box">
+        <div>
+            <div class="login-form row" style="background:beige">
+                <div class="col-sm-12 text-center login-header" id="logo_title">
+                    <!--<i class="login-logo fa fa-connectdevelop fa-5x"></i>-->
+                    <h4 class="login-title" style="color:gray">QuLv 测试管理系统</h4>
+                </div>
+                <div class="col-sm-12">
+                    <div class="login-body">
+                        <div class="progress hidden" id="login-progress">
+                            <div class="progress-bar progress-bar-success progress-bar-striped active"
+                                 role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 100%">
+                                Log In...
+                            </div>
+                        </div>
+                        <form action="" method="post">
+                            <div class="control">
+                                <input type="text" class="form-control" style="color:black" id="user_name"
+                                       name="user_name" placeholder="用户名"/>
+                            </div>
+                            <div class="control">
+                                <input type="password" class="form-control" style="color:black" id="password"
+                                       name="password" placeholder="密码"/>
+                            </div>
+                            <div class="login-button text-center">
+                                <!--<input type="submit" class="btn btn-primary" value="登录">-->
+                                <button type="button" onclick="login()" class="btn btn-primary">登录
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="login-footer">
+                        <span><a>{{err}}</a></span>
+                        <span class="text-right"><a href="#" class="color-white" style="color:black">忘记密码?</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+
+</html>
